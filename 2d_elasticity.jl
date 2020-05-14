@@ -18,8 +18,12 @@ mutable struct XYs
     Ys::Array
 end
 
+<<<<<<< HEAD
 
 a = open("../programing/efelkismos-hard.unv","r")
+=======
+a = open("../programing/efelkismos.unv","r")
+>>>>>>> 9326345e2427a87a121737451d7cb23681b8dc0d
 line = readlines(a)
 line = line[21:end]
 nodes = Array{Float64}[]
@@ -43,7 +47,10 @@ edge = Array{Int64}[]
 
 i = 1
 while true
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9326345e2427a87a121737451d7cb23681b8dc0d
     global i
     l = line[i]
     l = split(l)
@@ -66,6 +73,7 @@ while true
 
 end
 #read boundaries
+<<<<<<< HEAD
 function splitToInt(l)
     l = split(l)
     l = [parse(Int64,k) for k in l]
@@ -90,24 +98,63 @@ while true
         break
     end
     arr = splitToInt(line[i])
+=======
+
+i = i+3
+n = split(line[i])
+n = [parse(Int64,k) for k in n]
+n = n[end]
+line = line[i+2:end]
+bc = Array{Int64}[]
+global n = div(n,2)+mod(n,2)
+while true
+global i = 1
+global line,n
+while true
+    global i,line,n
+    if tryparse(Float64, split(line[i])[1]) == nothing
+        break
+    end
+    l = line[i]
+    l = split(l)
+    arr = [parse(Int64,k) for k in l]
+>>>>>>> 9326345e2427a87a121737451d7cb23681b8dc0d
     push!(bc,[arr[2]])
     if length(arr)>5
         push!(bc,[arr[6]])
     end
     i = i+1
+<<<<<<< HEAD
 end
     push!(bc,[-1])
     arr = splitToInt(line[i])
+=======
+    if (i>=n)
+        break
+    end
+end
+    l = line[i]
+    @show l
+    l = split(l)
+    arr = [parse(Int64,k) for k in l]
+>>>>>>> 9326345e2427a87a121737451d7cb23681b8dc0d
     if arr[1]==-1
         break
     end
     n = arr[end]
     n = div(n,2)+mod(n,2)
+<<<<<<< HEAD
     line = line[i+2:end]
 end
 
 
 
+=======
+    line = line[i+1:end]
+end
+
+
+>>>>>>> 9326345e2427a87a121737451d7cb23681b8dc0d
 #=
 using RecursiveArrayTools
 elem = VectorOfArray(elem); elem = convert(Array,elem)
@@ -118,7 +165,10 @@ nodes = Transpose(batch(nodes))
 edge = Transpose(batch(edge))
 elem = Transpose(batch(elem))
 elem = elem[:,[1 3 5 2 4 6]][:,1,:]
+<<<<<<< HEAD
 bc = Transpose(batch(bc))
+=======
+>>>>>>> 9326345e2427a87a121737451d7cb23681b8dc0d
 
 xs = 10*[-1 0 0 -0.5 0 -0.5]
 ys = 10*[0 0 1 0 0.5 0.5]
@@ -221,6 +271,7 @@ function ke(E,xs,ys)
     end
     return ke
 end
+<<<<<<< HEAD
 function BC(f,xedge,yedge,map)
     #f is vertical array
     #needs to multiplied by h
@@ -228,11 +279,22 @@ function BC(f,xedge,yedge,map)
     if map[1]==0
         l1 = zeros(7,1)
         l2 = [-0.949108  -0.741531  -0.405845  0.405845  0.741531  0.949108  0.0]
+=======
+function BC(f,xedge,yedge,mapx,mapy)
+    #f is vertical array
+    #needs to multiplied by h
+    #(fx,fy)
+    if mapx[1]==0
+        l1 = zeros(7,1)
+        l2 = [-0.949108  -0.741531  -0.405845  0.405845  0.741531  0.949108  0.0]
+        l3 = 1 .- l2
+>>>>>>> 9326345e2427a87a121737451d7cb23681b8dc0d
         w = [0.129485  0.279705  0.38183  0.38183  0.279705  0.129485  0.417959]
         #transform to 0~1
         l2 = 0.5 .*l2 .+ 0.5
         l3 = 1 .- l2
         w = 0.5 .* w
+<<<<<<< HEAD
     elseif map[2]==0
         l2 = zeros(7,1)
         l3 = [-0.949108  -0.741531  -0.405845  0.405845  0.741531  0.949108  0.0]
@@ -244,6 +306,21 @@ function BC(f,xedge,yedge,map)
     elseif map[3]==0
         l3 = zeros(7,1)
         l1 = [-0.949108  -0.741531  -0.405845  0.405845  0.741531  0.949108  0.0]
+=======
+    elseif mapx[2]==0
+        l2 = zeros(7,1)
+        l3 = [-0.949108  -0.741531  -0.405845  0.405845  0.741531  0.949108  0.0]
+        l3 = 1 .- l1
+        w = [0.129485  0.279705  0.38183  0.38183  0.279705  0.129485  0.417959]
+        #transform to 0~1
+        l3 = 0.5 .*l3 .+ 0.5
+        l1 = 1 .- l2
+        w = 0.5 .* w
+    elseif mapx[3]==0
+        l3 = zeros(7,1)
+        l1 = [-0.949108  -0.741531  -0.405845  0.405845  0.741531  0.949108  0.0]
+        l2 = 1 .- l1
+>>>>>>> 9326345e2427a87a121737451d7cb23681b8dc0d
         w = [0.129485  0.279705  0.38183  0.38183  0.279705  0.129485  0.417959]
         #transform to 0~1
         l1 = 0.5 .*l1 .+ 0.5
@@ -257,13 +334,18 @@ function BC(f,xedge,yedge,map)
     for i=1:7
         l = (l1[i],l2[i],l3[i])
         (x,y) = tria6(l,xedge,yedge)
+<<<<<<< HEAD
         bc = bc + N(l)'*f([x,y])
+=======
+        bc = bc + N(l)*f([x,y])
+>>>>>>> 9326345e2427a87a121737451d7cb23681b8dc0d
     end
     return bc
 end
 
 
 
+<<<<<<< HEAD
 
 
 n = length(elem[:,1])
@@ -278,11 +360,26 @@ for i =1:n
     ys = nodes[i1,2]
     i1 = [2 .*i1 (i1 .* 2 .-1)]
     @show i1
+=======
+n = length(elem[:,1])
+dofs = 12*n
+global E = Ematrix(220e9,0.33,"stress")
+global K = sparse([],[],Float64[],dofs,dofs);
+global M = sparse([],[],Float64[],dofs,dofs);
+@show @time begin
+    for i =1:n
+
+    i1 = elem[i,:]'
+    xs = nodes[i1,1]
+    ys = nodes[i1,2]
+    i1 = [i1 (i1 .* 2)]
+>>>>>>> 9326345e2427a87a121737451d7cb23681b8dc0d
     kre = 0.1 .* ke(E,xs,ys)
     mre = 0.1 .* 7e3 .* me(xs,ys)
     K[i1,i1] = K[i1,i1][1,:,1,:] + kre
     M[i1,i1] = M[i1,i1][1,:,1,:] + mre
 end
+<<<<<<< HEAD
 
 #start boundary conditions
 F = zeros(dofs,1)
@@ -374,3 +471,13 @@ for i=1:length(elem[:,1])
      end
      stress[i,:] = mean
  end
+=======
+end
+bottomedge1 = [4 44 14]; bottomedge1 = [0 4 14 0 44 0]
+bottomedge2 = [14 45 2]; bottomedge2 = [14 2 0 45 0 0]
+topedge1 = [24 56 3]; topedge1 = [3 24 0 0 0 56]
+topedge2 = [1 57 24]; topedge2 = [0 1 24 0 57 0]
+
+b = length(bc[:,1])
+edges = [i for k=1:b for i=1:n if issubset(bc[k,1],elem[i,:]) & issubset(bc[k,2],elem[i,:]) & issubset(bc[k,3],elem[i,:])]
+>>>>>>> 9326345e2427a87a121737451d7cb23681b8dc0d
