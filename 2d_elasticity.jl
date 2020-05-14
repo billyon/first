@@ -18,12 +18,13 @@ mutable struct XYs
     Ys::Array
 end
 
-
+println("opening file... \n")
 a = open("../programing/efelkismos-hard.unv","r")
 line = readlines(a)
 line = line[21:end]
 nodes = Array{Float64}[]
 #read nodes
+println("reading nodes...\n")
 global i=1
 while true
     global i
@@ -38,6 +39,7 @@ while true
 end
 line = line[i+2:end]
 #read elements
+println("reading elements....\n")
 elem = Array{Int64}[]
 edge = Array{Int64}[]
 
@@ -66,6 +68,8 @@ while true
 
 end
 #read boundaries
+println("reading boundaries...\n")
+
 function splitToInt(l)
     l = split(l)
     l = [parse(Int64,k) for k in l]
@@ -272,12 +276,12 @@ global E = Ematrix(220e9,0.33,"stress")
 global K = sparse([],[],Float64[],dofs,dofs);
 global M = sparse([],[],Float64[],dofs,dofs);
 
+println("calculating stiffness/mass matrix...\n")
 for i =1:n
     i1 = elem[i,:]'
     xs = nodes[i1,1]
     ys = nodes[i1,2]
     i1 = [2 .*i1 (i1 .* 2 .-1)]
-    @show i1
     kre = 0.1 .* ke(E,xs,ys)
     mre = 0.1 .* 7e3 .* me(xs,ys)
     K[i1,i1] = K[i1,i1][1,:,1,:] + kre
@@ -285,6 +289,8 @@ for i =1:n
 end
 
 #start boundary conditions
+println("calculating right-hand-side...\n")
+
 F = zeros(dofs,1)
 #find indexes of edge that are to be bounded
 nbc = count(x->x==-1,bc)+1
@@ -309,20 +315,18 @@ while true
     #zero the non edge indexes of element
     superelem = elem[rows,:]
     mapx = [sum(dims=2,superelem[i,:] .== ed[i,:]') for i=1:length(superelem[:,1])]
-    @show mapx[1]
     for k=1:length(mapx)
         global bc,edge,elem,nodes,rows,xedge,yedge,mapx,i,F
         g(x) = f(x)[i]
         a = BC(g,xedge[k,:],yedge[k,:],mapx[k])
-        @show a
         id = [2 .*elem[rows[k],:] (2 .* elem[rows[k],:].-1)]
         F[id] = a
-        @show F[id]
     end
     i = i+1
 end
 #gib traction nodes where (u,v) are known
 #reminder, ix contains boundary condition nodes INDEXES
+println("solving for U....\n")
 freedofs = zeros(dofs,1)
 fixedofs = edge[bc[ix[1]],:]
 fixedofs = elem[[i for k=1:length(ix[1]) for i=1:length(elem[:,1]) if issubset(fixedofs[k,1],elem[i,:]) & issubset(fixedofs[k,2],elem[i,:]) & issubset(fixedofs[k,3],elem[i,:])],:][:] #contains superset id element
@@ -347,8 +351,8 @@ for i=1:n
     i1 = [2 .*i1 (i1 .* 2 .-1)]
 end
 
-
-#calculate nodal stress
+println("calculating element average stress....\n")
+#calculate element stress
 stress = zeros(n,3)
 for i=1:length(elem[:,1])
     l =  [1 0 0;
@@ -375,4 +379,6 @@ for i=1:length(elem[:,1])
      end
      stress[i,:] = mean
  end
-println(stress')
+
+#println(stress')
+println("DONE! \n")
