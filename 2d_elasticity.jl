@@ -363,13 +363,14 @@ for i=1:length(elem[:,1])
     ys = nodes[i1,2]
     mean = zeros(3,1)
     for k =1:6
-        nxy = Nxy(l,xs,ys)
+        nxy = Nxy(l[k,:],xs,ys)
         nx = nxy[1,:]; ny = nxy[2,:];
         nx = [1 0 0 0 0 0;0 0 0 0 0 0;0 1 0 0 0 0;0 0 0 0 0 0;0 0 1 0 0 0;0 0 0 0 0 0;0 0 0 1 0 0;0 0 0 0 0 0;0 0 0 0 1 0;0 0 0 0 0 0;0 0 0 0 0 1;0 0 0 0 0 0]*nx
         ny = [0 0 0 0 0 0;1 0 0 0 0 0;0 0 0 0 0 0;0 1 0 0 0 0;0 0 0 0 0 0;0 0 1 0 0 0;0 0 0 0 0 0;0 0 0 1 0 0;0 0 0 0 0 0;0 0 0 0 1 0;0 0 0 0 0 0;0 0 0 0 0 1]*ny;
         nxy = [nx';ny']
         xy = [collect(zip(xs,ys))[i][k] for i=1:6 for k=1:2]
-        epsilon = E*parag*xy
+        b = [1 0;0 0;0 1]*[nx';ny'] + [0 0;0 1;1 0]*[nx';ny']
+        epsilon = E*b*xy
         mean = mean + epsilon/6;
      end
      stress[i,:] = mean
