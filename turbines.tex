@@ -1,0 +1,246 @@
+\documentclass[12pt,a4paper,twoside]{extreport}
+\usepackage[utf8]{inputenc}
+\usepackage[LGR,T1]{fontenc}
+\usepackage[greek,english]{babel}
+\usepackage{alphabeta}
+\usepackage{amsmath}
+\usepackage{tocloft}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{pgfplots}
+\usepackage{filecontents}
+%\usepackage{titling}
+\usepackage{fancyhdr}
+\usepackage{etoolbox}
+\usepackage[nottoc,notlof,notlot]{tocbibind}
+\usepackage{lastpage}
+\usepackage{blindtext}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{stackengine,lipsum}
+\setstackEOL{\\}
+\usepackage{floatrow}
+\floatsetup[table]{capposition=top}
+\usepackage{tikz}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{datavisualization}
+\usetikzlibrary{shapes.geometric, arrows, shadows,positioning}
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{indentfirst}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\addto\captionsenglish{%
+  \renewcommand{\contentsname}{}%
+   \renewcommand{\chaptername}{}%
+   \renewcommand{\thechapter}{}%
+    \renewcommand{\figurename}{}%
+    \renewcommand{\bibname}{Βιβλιογραφία}
+     \renewcommand{\tablename}{Πίνακας}
+}
+
+%define header
+\patchcmd{\chapter}{\thispagestyle{plain}}{\thispagestyle{fancy}}{}{}
+
+\makeatletter
+\newcommand{\rightorleftmark}{%
+  \begingroup\protected@edef\x{\rightmark}%
+  \ifx\x\@empty
+    \endgroup\leftmark
+  \else
+    \endgroup\rightmark
+  \fi}
+\makeatother
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[RE]{\slshape \fontsize{10}{10} \leftmark}
+\fancyhead[RO]{\slshape \fontsize{10}{10} \rightorleftmark}
+\fancyhead[L]{\includegraphics[width=1.5cm]{ntualogo.png} 
+\Longstack[l]{\textbf{\fontsize{10}{10} Εθνικό Μετσόβιο Πολυτεχνείο} \\  \fontsize{10}{10} Σχολή Μηχανολόγων Μηχανικών
+}}
+\setlength{\headheight}{45pt}
+\cfoot{Μάιους}
+\rfoot{\thepage \ of \pageref{LastPage}}
+
+
+\author{Κοράκης Βασίλειος, mc17110}
+\title{\underline{\textbf{Θέματα Στροβιλομηχανών}}  \\
+ \large  \vspace{0.5cm}  Θερμικές στροβιλομηχανές, $5^o$ εξάμηνο \vfill
+ }
+\date{\vfill Αθήνα,Μάιος 2020}
+
+
+
+
+\begin{document}
+\maketitle
+\chapter*{Δεδομένα εισόδου}
+Oι παράμετροι ονόματος λαμβάνονται: με $ON=2, EΠ=10, ΠΑ=2$, ως $\\ Δ1=0.9087, \\Δ2=0.9783,\\Δ3=0.9089$
+\newpage
+\chapter{Θέμα Α}
+\section*{$A1$)}
+Με τις παραδοχές της σταθερής αξονικής/περιφερειακής ταχύτητας και της επαναληπτικής βαθμίδας στροβίλου, ισχύει:
+\begin{center}
+    \begin{align*}
+    tan(Δα) & = \frac{-ΦΨ}{Φ^2 +(1-r)^2 - \frac{Ψ^2}{4} } \\
+    \text{ή} \qquad    \frac{Ψ^2}{4}-Φ^2-\frac{ΦΨ}{tan(Δα)} & = (1-r)^2 
+    \end{align*}
+\end{center}
+θέτοντας $Ψ = αψ + βφ, Φ=γψ + δφ$ η εξίσωση γίνεται:
+\begin{center}
+    $\displaystyle (1-r)^2 = \frac{-4βδ + β^2 tan(Δα)-4δ^2tan(Δα)}{4tan(Δα)}Φ^2 + \frac{-2αδ-2βγ+αβtan(Δα)-4δγtan(Δα)}{2tan(Δα)}ΦΨ+ \frac{α^2tan(Δα)-4αγ-4γ^2tan(Δα)}{4tan(Δα)}Ψ^2$
+\end{center}
+οπότε για:
+\begin{equation*}
+\left\{ \begin{array}
+  {lr} α=δ=1 \\  γ=0
+\end{array} \right.
+\end{equation*}
+και μηδενίζοντας των όρο που περιέχει $ΦΨ$, προκύπτει ότι $β=\frac{2}{tan(Δα)}$. Άρα,
+\begin{equation*}
+\left \{ \begin{array}
+  {lr} Φ=φ \\  Ψ=ψ(φ)+φ\frac{2}{tan(Δα)}
+\end{array}\right.
+\end{equation*}
+με $ψ=\pm \frac{2\sqrt{φ^2+tan^2(Δα)(1-2r+r^2+φ^2}}{tan(Δα)}$
+\newline μέσω δοκιμής επιλέγεται η \textbf{αρνητική} λύση για γωνίες κάτω τον 90 (απόλυτα) και η \textbf{θετική} λύση για γωνίες πάνω. Επίσης, τίθενται οι  γωνίες $Δα=α1-α2=α1-α3$:
+\newline $-65 \quad -80\quad-95\quad-110\quad-125\quad\text{(βήμα $15^o$)}$
+
+Έτσι, για r=0.656, γίνεται το διάγραμμα:
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section*{$A2$)}
+Με την ίδια λογική:
+\begin{center}
+    \begin{align*}
+    tan(Δβ) & = \frac{ΦΨ}{Φ^2 +r^2 - \frac{Ψ^2}{4} } \\
+    \text{ή} \qquad    \frac{Ψ^2}{4}-Φ^2+\frac{ΦΨ}{tan(Δβ)} & = r^2 
+    \end{align*}
+\end{center}
+και πάλι θέτοντας $Ψ = αψ + βφ, Φ=γψ + δφ$ η εξίσωση γίνεται:
+\begin{center}
+    $\displaystyle r^2 = \frac{-4βδ + β^2 tan(Δβ)-4δ^2tan(Δβ)}{4tan(Δβ)}Φ^2 + \frac{+2αδ+2βγ+αβtan(Δβ)-4δγtan(Δβ)}{2tan(Δβ)}ΦΨ+ \frac{α^2tan(Δβ)+4αγ-4γ^2tan(Δβ)}{4tan(Δβ)}Ψ^2$
+\end{center}
+οπότε για:
+\begin{equation*}
+\left\{ \begin{array}
+  {lr} α=δ=1 \\  γ=0
+\end{array} \right.
+\end{equation*}
+και μηδενίζοντας των όρο που περιέχει $ΦΨ$, προκύπτει ότι $β=\frac{-2}{tan(Δβ)}$. Άρα,
+\begin{equation*}
+\left \{ \begin{array}
+  {lr} Φ=φ \\  Ψ=ψ(φ)+φ\frac{-2}{tan(Δβ)}  
+\end{array}\right.
+\end{equation*}
+με $ψ=\pm \frac{2\sqrt{r^2tan^2(Δβ)+(1+tan^2(Δβ)Φ^2}}{tan(Δβ)}$
+\newline και πάλι μέσω δοκιμών επιλέγεται η \textbf{θετική} λύση για γωνίες κάτω τον 90, και η \textbf{αρνητική} λύση για πάνω. Οι γωνίες τίθενται ως, $Δβ=β2-β3$:
+\newline $50 \quad 65 \quad 80 \quad 95 \quad 110 \quad\ \text{(βήμα $15^o$)}$
+\newline Έτσι, γίνεται το διάγραμμα:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section*{$A3$)}
+Για την γωνία εξόδου του ακροφυσίου, $α2$, ισχύει:
+\begin{center}
+    \begin{align*}
+        (1-r+Ψ)\frac{1}{Φ} & = tan(α2) \\
+        \text{ή} \qquad Ψ & = 2(Φtan(α2)-1+r)
+            \end{align*}
+\end{center}
+με τις γωνίες να επιλέγονται ως:
+\newline $10 \quad 23\quad36\quad49\quad62\quad\text{(βήμα $13^o$)}$
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section*{$A4$)}
+Οι μεσαίες καμπύλες τέμνονται στα σημεία:
+\newline
+\begin{tabular}{c c}
+\left \{ \begin{array}
+  {lr} α1-α2  = -95 \\ β2-β3  = 80
+\end{array}\right.
+\hspace{1cm}
+&
+κ'
+\hspace{1cm}
+
+\left \{ \begin{array}
+  {lr} Φ = 0.7 \\  Ψ = 1.688
+\end{array}\right.
+\\ 
+ &
+\end{tabular}
+
+ 
+\par Οπότε βρίσκονται τα μεγέθη του τριγώνου ταχυτήτων:
+\newline
+\begin{equation*}
+\left\{ \begin{array}
+  {lr} α1=α3=Arctan(\frac{1}{Φ}(1-r-\frac{Ψ}{2}))=-35.54^o \\
+  α2 = Arctan(\frac{1}{Φ}(1-r+\frac{Ψ}{2}))=59.49^o \\
+  β2 = Arctan(\frac{1}{Φ}(-r+\frac{Ψ}{2}))=15.03^o \\
+  β3 = Arctan(\frac{1}{Φ}(-r-\frac{Ψ}{2}))=-64.98^o
+\end{array} \right.
+\end{equation*}
+\par Τα πτερύγια έχουν μορφή παραβολής που ξεκινάει από το (0,0), οι γωνίες <<εισόδου-εξόδου>> ή <<αριστερά-δεξιά>> όπως θα συμβολιστούν παρακάτω, είναι καθορισμένες, και είναι είτε απόλυτες γωνίες, α, για το ακροφύσιο, είτε σχετικές γωνίες-γωνίες μετάλου, β, για τον ρότορα. Η εφαπτομένη της καμπύλης που πρέπει να ισούται με τις γωνίες αυτές:
+\begin{tabular}{c c}
+\left \{ \begin{array}
+  {lr} y = ax^2 +bx \\ y' = 2ax+b
+\end{array}\right.
+
+\hspace{1cm}
+&
+κ'
+\hspace{1cm}
+
+\left \{ \begin{array}
+  {lr} tan(α_L) = y'(0)=b \\  tan(α_R) = y'(L)=2aL+b
+\end{array}\right.
+
+\\ 
+ &
+
+\end{tabular}
+\newline δίνει τελικά την εξίσωση πτερυγίου $\displaystyle{y = \frac{tan(α_R)-tan(α_L)}{2L}x^2+tan(α_L)x}$ .
+\par Εφόσον η χορδή (διάνυσμα r στο παρακάτω σχήμα) έχει μήκος 1, πρέπει $|\Vec{r}|=1$ ή $\sqrt{L^2+y^2(L)}=1$ και τελικά το L υπολογίζεται:
+\newline
+$\displaystyle L = \frac{1}{\sqrt{1+(\frac{\tan(α_R)-tan(α_L)}{2}+tan(α_L))^2}}$
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[set mark/.style args={#1 at #2}{postaction={decorate,
+decoration={markings,mark=at position #2 with #1}}}]
+\draw [<->,thick] (0,2) node (yaxis) [above] {$y$}
+        |- (3,0) node (xaxis) [right] {$x$};
+\coordinate (p1) at (0,0);
+\coordinate (p2) at (2,2);
+\coordinate (p3) at (1.88,1.93);
+\draw[gray,thick] (p1) edge[bend left=20,distance=1cm] (p2);
+\filldraw[black] (p3) circle (1pt);
+\draw [->,very thick] (p1) to node [at end,below]{$\scriptstyle{\Vec{r}=(L,y(L))}$} (p3) ;
+\end{tikzpicture}
+\caption*{\small{βοηθητικό σχήμα ορισμού χορδής}}
+\end{figure}
+\newline \underline{Πτερύγιο Στάτορα}:
+\newline $α_L=α1, \qquad α_R=α2$
+\newline $L_s=0.8975, \qquad \boxed{y_s=1.3434x^2-0.7143x}$
+\newline \underline{Πτερύγιο ρότορα}:
+\newline $α_L=β2, \qquad α_R=β3$
+\newline $L_R=0.7297, \qquad \boxed{y_R=-1.6524x^2+0.2686x}$
+\newline
+\vspace{1cm}
+s
+\chapter{}
+\chapter{}
+
+
+
+\newpage
+\end{document}
