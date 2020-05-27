@@ -2,6 +2,7 @@ alacritty
 all-repository-fonts
 atom
 atomix
+audacity
 autoconf
 automake
 baobab
@@ -99,6 +100,7 @@ kde-cli-tools
 kde-gtk-config
 kdecoration
 kdeplasma-addons
+keynav
 kgamma5
 khotkeys
 kinfocenter
@@ -141,6 +143,7 @@ package-query
 pacman-contrib
 paraview
 patch
+pdftk
 piper
 pkgconf
 plasma-browser-integration
@@ -209,14 +212,17 @@ texlive-fontsextra
 texlive-formatsextra
 texlive-games
 texlive-humanities
+texlive-langgreek
 texlive-latexextra
 texlive-music
 texlive-pictures
 texlive-pstricks
 texlive-publishers
 texlive-science
+texstudio
 totem
 tree
+udisks2-qt5
 unzip
 user-manager
 vi
