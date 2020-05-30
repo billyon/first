@@ -3,12 +3,12 @@ import numpy as np
 import matplotlib
 
 font = {'family' : 'normal',
-        'size'   : 16}
+        'size'   : 25}
 matplotlib.rc('font', **font)
 
 
 name = ['F_x','F_y','F_z']
-
+plt.figure(1)
 for i in range(0,3):
     f = open('/home/billykon/Desktop/OMADA 12/'+name[i]+'.lvm','r')
     l = f.readlines()
@@ -26,11 +26,12 @@ for i in range(0,3):
     n = len(l)
     t = np.linspace(0,n/10,num=n)
 
-    plt.figure(i+1)
-    plt.plot(t,l,linewidth=0.5)
+    #plt.figure(i+1)
+    plt.plot(t,l,label=name[i],linewidth=2)
     plt.grid()
     plt.xlabel('t [s]')
-    plt.ylabel('$ '+name[i]+' [ daN ] $')
+    plt.ylabel('$ F [ daN ] $')
+    plt.legend()
     f.close()
 
 
@@ -128,4 +129,50 @@ plt.ylabel('$F_y [daN]$')
 plt.legend()
 plt.grid(True, which="both", ls="-")
 plt.axes().set_aspect('equal')
+
+
+plt.figure(10)
+t = [0.5, 0.3, 0.1]
+ra1 = [0.2, 1.4, 1.4]
+ra2 = [1.6, 2.6, 3]
+ra3 = [5, 4.6, 4.8]
+plt.plot(t,ra1,'-x',label='$f = 0.1 [mm/rev]$',linewidth=2)
+plt.plot(t,ra2,'-x',label='$f = 0.2 [mm/rev]$',linewidth=2)
+plt.plot(t,ra3,'-x',label='$f = 0.5 [mm/rev]$',linewidth=2)
+plt.xlabel('$t [mm]$')
+plt.ylabel('$R_a [μm]$')
+#plt.xlim([0.1,0.6])
+plt.legend()
+plt.grid(True, which="both", ls="-")
+#plt.axes().set_aspect('equal')
+
+
+
+f = [0.1 ,0.2, 0.31]
+Ra1 = [0.2, 1.6, 5]
+Ra2 = [1.4, 2.6, 4.6]
+Ra3 = [1.4, 3, 4.8]
+
+plt.figure(11)
+plt.plot(f,Ra1,'-x',label='$t = 0.5 [mm]$',linewidth=2)
+plt.plot(f,Ra2,'-x',label='$t = 0.3 [mm]$',linewidth=2)
+plt.plot(f,Ra3,'-x',label='$t = 0.1 [mm]$',linewidth=2)
+plt.xlabel('$f [mm/rev]$')
+plt.ylabel('$R_a [μm]$')
+plt.legend()
+plt.grid(True, which="both", ls="-")
+#plt.axes().set_aspect('equal')
+
+
+
+
+
+
+
+
+
+
+
+
+
 plt.show()
