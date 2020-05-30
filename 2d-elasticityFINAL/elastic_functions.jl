@@ -18,6 +18,7 @@ function BC(f, xedge, yedge, map)
         l2 = 0.5 .* l2 .+ 0.5
         l3 = 1 .- l2
         w = 0.5 .* w
+        road_coord = 2
     elseif map[2] == 0
         l2 = zeros(7, 1)
         l3 = [-0.949108 -0.741531 -0.405845 0.405845 0.741531 0.949108 0.0]
@@ -26,6 +27,7 @@ function BC(f, xedge, yedge, map)
         l3 = 0.5 .* l3 .+ 0.5
         l1 = 1 .- l3
         w = 0.5 .* w
+        road_coord =3
     elseif map[3] == 0
         l3 = zeros(7, 1)
         l1 = [-0.949108 -0.741531 -0.405845 0.405845 0.741531 0.949108 0.0]
@@ -34,16 +36,25 @@ function BC(f, xedge, yedge, map)
         l1 = 0.5 .* l1 .+ 0.5
         l2 = 1 .- l1
         w = 0.5 .* w
+        road_coord  = 1
     else
         println("this is not a valid edge map")
         exit()
     end
+
     bc = zeros(12, 1)
     for i = 1:7
         l = (l1[i], l2[i], l3[i])
         (x, y) = tria6(l, xedge, yedge)
-
-        bc = bc + w[i]*N(l)' * f([x, y])
+        nl = Nl1l2(l)
+        xyl1l2 = nl*[xs' ys']
+        xyl1l2 = xyl1l2'
+        xyl3 = -1 ./sum(xyl1l2,dims=2)
+        @show xyl1l2
+        road = [xyl1l2[1,:] xyl1l2[2,:] xyl3]
+        road = road[:,road_coord]
+        @show road
+        bc = bc + w[i]*N(l)' * f([x, y])*sqrt(road[1]^2+road[2]^2)
     end
     return bc
 end
@@ -63,7 +74,11 @@ function N(l)
          0 0 0 0 0 0 N1 N2 N3 N4 N5 N6]
     return N
 end
+#=
 function Nl(l)
+    to be removed
+
+
     (l1, l2, l3) = l
     Nl1 = [(4 * l1 - 1) 0 0 (4 * l2) 0 (4 * l3)]
     Nl2 = [0 (4 * l2 - 1) 0 (4 * l1) (4 * l3) 0]
@@ -74,12 +89,13 @@ function Nl(l)
 end
 
 function JacobianL1L2L3(l,xs,ys)
-    #xs are xi of nodes at correct order
-    #ys are yi of nodes at correct order
+    to be removed
+
+
     J = Nl(l)*[xs' ys']
     return J
 end
-#=
+to be removed
 function Nxyl1l2l3(l,xs,ys)
     #row 1 has x derivatives
     #row 2 has y derivatives
@@ -94,7 +110,7 @@ function Nxy(l,xs,ys)
     #row 2 has y derivatives
     Bo = Nl1l2(l)
     J = JacobianL1L2(l,xs,ys)
-    nxy = inv(J)*Bo
+    nxy = J\Bo
     return nxy
 end
 function LN(l,xs,ys)
@@ -223,13 +239,21 @@ function IDs(bc)
     ix = [edge[ix[i],:] for i=1:nbc-1]
     return Int64(nbc-1),ni,ix
 end
-
+#=
+xs = [1 0 0 0.5 0 0.5]
+ys = [0 -.5 .5 -.25 0 .25]
+E = Ematrix(220e9,0.5,"stress")
 figure(1)
 for l1=0:0.1:1
     for l2=0:0.1:1
         l3 = 1 -l1-l2
         if l3<0 break end
-        (x,y) = tria6([l1 l2 l3],xs,ys)
-        scatter(x,y)
+        l = [l1 l2 l3]
+        (x,y) = tria6(l,xs,ys)
+        f  = sum(N(l),dims=2)
+        scatter3D(x,y,f[1])
     end
 end
+=#
+xs = [1 0 0 0.5 0 0.5]
+ys = [0 -.5 .5 -.25 0 .25]
