@@ -104,17 +104,17 @@ function ke(E,xs,ys)
     return kre
 end
 
-xs = [0 1 1 0 0.5 1 .5 0 .5].*100 .+ 1000
-ys = [0 0 1 1 0 .5 1 .5 .5].*100 .+ 1000
+xs = [0 1 1 0 0.5 1 .5 0 .5] .+ 1000
+ys = [0 0 1 1 0 .5 1 .5 .5] .+ 1000
 xs = 2 .*[0 1 1 0 0.5 1 .5 0 .5] .+1000
 ys = 2 .*[0 0 1 1 0 .5 1 .5 .5] .+ 1000
-xs = 1 .*[0 1 1 0 0.5 1 .5 0 .5] .+ 0
-ys = 1 .*[0 0 1 1 0 .5 1 .5 .5] .+ 0
+xs = 1 .*[0 1 1 0 0.5 1 .5 0 .5].*1 .+ 0
+ys = 1 .*[0 0 1 1 0 .5 1 .5 .5].*1 .+ 0
 E = Ematrix(220e9,0.5,"stress")
 kre = ke(E,xs,ys)
 
 freedofs = ones(1,18)
-fixedofs = [1 8 4 10 17 13]
+fixedofs = [1 8 4 10]
 freedofs[fixedofs] .= 0
 freedofs = [i for i=1:18 if freedofs[i] .== 1]'
 
@@ -148,7 +148,7 @@ for j=0:0.1:.5
     uv = [i j]
     (x,y)=quadra(uv,xs,ys)
     s = E*LN(uv,xs,ys)*U
-    scatter(x,s[1])
+    scatter(i,s[1])
 end
 end
 for k=1:1

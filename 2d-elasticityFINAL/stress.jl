@@ -25,5 +25,6 @@ for i=1:length(elem[:,1])
         sigma = E*B*u
         mean = mean + sigma/6;
      end
+     @show mean
      #stress[i,:] = mean
  end

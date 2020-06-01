@@ -41,7 +41,7 @@ println("solving for U....\n")
 freedofs = zeros(dofs,1)
 fixedofs = ix[1][:]'#take first's b.c. nodes
 
-fixedofs = [fixedofs[1] (fixedofs .+Int64(0.5*dofs))]
+fixedofs = [fixedofs[1] (fixedofs[1] .+Int64(0.5*dofs))]
 freedofs[fixedofs] .= 1
 freedofs = [i for i=1:dofs if freedofs[i]==0]
 
@@ -74,7 +74,7 @@ l = [1 0 0]
 
 #=
 F = zeros(12,1)
-F[1] = 0.5*1e6
+F[1] = 1e6
 freedofs = ones(1,12)
 fixedofs = [2 5 3 11]
 freedofs[fixedofs] .= 0
@@ -86,14 +86,19 @@ U  = zeros(12,1)
 Ufree = kre[freedofs,freedofs]\F[freedofs]
 U[freedofs] .= Ufree
 println(E*LN([2 1 1]./4,xs,ys)*U)
-scatter()
+figure(11)
 for l1 = 0.:0.01:1.
     l2 = 0.5*(1-l1)
     l3 = l2
     sigma = E*LN([l1 l2 l3],xs,ys)*U
-    scatter!([l1],[sigma[1]/1e6],legend=false,label="sx")
+    scatter([l1],[sigma[1]/1e6])
     #scatter!([l1],[sigma[2]/1e6],legend=false,label="sy")
     #scatter!([l1],[sigma[3]/1e6],legend=false,label="txy")
 end
-scatter!()
 =#
+xs = nodes[elem[2,:],1]
+ys = nodes[elem[2,:],2]
+xs = xs' ; ys  = ys';
+g(x) = f(x)[1]
+l = [0 1 1]
+BC(g,xs,ys,l)'

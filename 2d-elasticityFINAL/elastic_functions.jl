@@ -19,6 +19,7 @@ function BC(f, xedge, yedge, map)
         l3 = 1 .- l2
         w = 0.5 .* w
         road_coord = 2
+        map = 1
     elseif map[2] == 0
         l2 = zeros(7, 1)
         l3 = [-0.949108 -0.741531 -0.405845 0.405845 0.741531 0.949108 0.0]
@@ -27,7 +28,8 @@ function BC(f, xedge, yedge, map)
         l3 = 0.5 .* l3 .+ 0.5
         l1 = 1 .- l3
         w = 0.5 .* w
-        road_coord =3
+        road_coord =1
+        map = 2
     elseif map[3] == 0
         l3 = zeros(7, 1)
         l1 = [-0.949108 -0.741531 -0.405845 0.405845 0.741531 0.949108 0.0]
@@ -37,6 +39,7 @@ function BC(f, xedge, yedge, map)
         l2 = 1 .- l1
         w = 0.5 .* w
         road_coord  = 1
+        map = 3
     else
         println("this is not a valid edge map")
         exit()
@@ -49,11 +52,19 @@ function BC(f, xedge, yedge, map)
         nl = Nl1l2(l)
         xyl1l2 = nl*[xs' ys']
         xyl1l2 = xyl1l2'
-        xyl3 = -1 ./sum(xyl1l2,dims=2)
-        @show xyl1l2
-        road = [xyl1l2[1,:] xyl1l2[2,:] xyl3]
+        xyl1 = xyl1l2[:,1] - xyl1l2[:,2]
+        xyl2 = xyl1l2[:,2] - xyl1l2[:,1]
+
+        if     map==1
+            xyl3 = -xyl1l2[:,1]
+        elseif map==2
+            xyl3 = xyl1l2[:,2]
+        else
+            xyl3 = [0; 0]
+        end
+        #xyl3 = -sum(xyl1l2,dims=2)
+        road = [xyl1 xyl2 xyl3]
         road = road[:,road_coord]
-        @show road
         bc = bc + w[i]*N(l)' * f([x, y])*sqrt(road[1]^2+road[2]^2)
     end
     return bc
@@ -74,9 +85,9 @@ function N(l)
          0 0 0 0 0 0 N1 N2 N3 N4 N5 N6]
     return N
 end
-#=
+
 function Nl(l)
-    to be removed
+#    to be removed
 
 
     (l1, l2, l3) = l
@@ -87,7 +98,7 @@ function Nl(l)
     #returns partials of Ni at l
     return Nl
 end
-
+#=
 function JacobianL1L2L3(l,xs,ys)
     to be removed
 
