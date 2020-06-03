@@ -291,6 +291,7 @@ xorg-xvinfo
 xorg-xwd
 xorg-xwininfo
 xorg-xwud
+xscreensaver
 yajl
 yaourt
 yelp

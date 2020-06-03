@@ -6,7 +6,11 @@ font = {'family' : 'normal',
         'size'   : 25}
 matplotlib.rc('font', **font)
 
-
+plt.rcParams.update({
+    "font.family": "serif",
+    "font.serif": [],           
+    "font.sans-serif": [],  
+})
 name = ['F_x','F_y','F_z']
 plt.figure(1)
 for i in range(0,3):
