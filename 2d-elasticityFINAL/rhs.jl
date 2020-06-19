@@ -23,9 +23,10 @@ while true
     mapx = [sum(dims=2,superelem[k,:] .== ix[i][k,:]') for k=1:length(superelem[:,1])]#zero the non edge indexes of element
     for k=1:length(mapx)
         g(x) = f(x)[i]
-        a = BC(g,xedge[k,:],yedge[k,:],mapx[k])
+        a = BC(g,xedge[k,:]',yedge[k,:]',mapx[k])
         id = [ix[i][k,:]' (ix[i][k,:]' .+ Int64(0.5*dofs))]
-
+        id = sort(id,dims=2)
+        
         idlocal = [mapx[k]' mapx[k]'] #has the global degrees of freedoms
         idlocal = [idlocal[i] .==1 for i=1:12]
         F[id] .= F[id] .+ a[idlocal]'

@@ -18,7 +18,7 @@ function BC(f, xedge, yedge, map)
         l2 = 0.5 .* l2 .+ 0.5
         l3 = 1 .- l2
         w = 0.5 .* w
-        road_coord = 2
+        road_coord = 3
         map = 1
     elseif map[2] == 0
         l2 = zeros(7, 1)
@@ -28,7 +28,7 @@ function BC(f, xedge, yedge, map)
         l3 = 0.5 .* l3 .+ 0.5
         l1 = 1 .- l3
         w = 0.5 .* w
-        road_coord =1
+        road_coord =3
         map = 2
     elseif map[3] == 0
         l3 = zeros(7, 1)
@@ -38,33 +38,28 @@ function BC(f, xedge, yedge, map)
         l1 = 0.5 .* l1 .+ 0.5
         l2 = 1 .- l1
         w = 0.5 .* w
-        road_coord  = 1
+        road_coord  = 2
         map = 3
     else
         println("this is not a valid edge map")
         exit()
     end
 
+
     bc = zeros(12, 1)
     for i = 1:7
         l = (l1[i], l2[i], l3[i])
         (x, y) = tria6(l, xedge, yedge)
-        nl = Nl1l2(l)
-        xyl1l2 = nl*[xs' ys']
-        xyl1l2 = xyl1l2'
-        xyl1 = xyl1l2[:,1] - xyl1l2[:,2]
-        xyl2 = xyl1l2[:,2] - xyl1l2[:,1]
 
-        if     map==1
-            xyl3 = -xyl1l2[:,1]
-        elseif map==2
-            xyl3 = xyl1l2[:,2]
+        road = NL1L2L3(l,xedge,yedge) #gives [xl1 yl1; xl2 yl2; xl3 yl3]
+        if road_coord == 1
+            road = road[1,:]
+        elseif road_coord ==2
+            road = road[2,:]
         else
-            xyl3 = [0; 0]
+            road = road[3,:]
         end
-        #xyl3 = -sum(xyl1l2,dims=2)
-        road = [xyl1 xyl2 xyl3]
-        road = road[:,road_coord]
+
         bc = bc + w[i]*N(l)' * f([x, y])*sqrt(road[1]^2+road[2]^2)
     end
     return bc
@@ -85,7 +80,16 @@ function N(l)
          0 0 0 0 0 0 N1 N2 N3 N4 N5 N6]
     return N
 end
+function NL1L2L3(l,xs,ys)
+    J = JacobianL1L2L3(l,xs,ys)
+    J = [1 1 1; J']
+    P = J\[0 0;1 0; 0 1]
+    nxy = Nxy(l,xs,ys)'
 
+    nl1l2l3 = P'\nxy'
+    xyl1l2l3 = nl1l2l3*[xs' ys']
+    return xyl1l2l3
+end
 function Nl(l)
 #    to be removed
 
@@ -98,15 +102,12 @@ function Nl(l)
     #returns partials of Ni at l
     return Nl
 end
-#=
 function JacobianL1L2L3(l,xs,ys)
-    to be removed
-
 
     J = Nl(l)*[xs' ys']
     return J
 end
-to be removed
+#=
 function Nxyl1l2l3(l,xs,ys)
     #row 1 has x derivatives
     #row 2 has y derivatives

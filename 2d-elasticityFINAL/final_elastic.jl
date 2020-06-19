@@ -76,7 +76,7 @@ l = [1 0 0]
 F = zeros(12,1)
 F[1] = 1e6
 freedofs = ones(1,12)
-fixedofs = [2 5 3 11]
+fixedofs = [5 ]
 freedofs[fixedofs] .= 0
 freedofs = freedofs .==1
 freedofs = freedofs[:]
@@ -95,10 +95,11 @@ for l1 = 0.:0.01:1.
     #scatter!([l1],[sigma[2]/1e6],legend=false,label="sy")
     #scatter!([l1],[sigma[3]/1e6],legend=false,label="txy")
 end
-=#
+
 xs = nodes[elem[2,:],1]
 ys = nodes[elem[2,:],2]
 xs = xs' ; ys  = ys';
 g(x) = f(x)[1]
-l = [0 1 1]
-BC(g,xs,ys,l)'
+l = [1 1 0]
+print(BC(g,xs,ys,l)')
+=#

@@ -4,6 +4,7 @@ atom
 atomix
 audacity
 autoconf
+autofs
 automake
 baobab
 base
@@ -90,6 +91,7 @@ gvfs-mtp
 gvfs-nfs
 gvfs-smb
 gwenview
+hashcat
 hdf5-salome
 hydra
 imwheel
@@ -125,14 +127,19 @@ libreoffice-fresh
 libstroke
 lightscreen
 linux
+losslesscut
 m4
 make
 milou
 mousetweaks
 mpv
 nano
+nasm
 nautilus-terminal
 nmap
+ntfs-3g
+ntop
+ntopng
 ntp
 nvidia
 obs-studio
@@ -168,6 +175,7 @@ python-scipy
 python-tensorflow-cuda
 python2-pillow
 python2-pip
+qbittorrent
 qt5-3d
 qt5-charts
 qt5-connectivity
@@ -223,6 +231,7 @@ texlive-pstricks
 texlive-publishers
 texlive-science
 texstudio
+thunar
 totem
 tree
 udisks2-qt5
@@ -237,6 +246,7 @@ vlc
 wget
 wine
 wine-gecko
+wireshark-qt
 wmctrl
 xautomation
 xbindkeys
@@ -295,3 +305,4 @@ xscreensaver
 yajl
 yaourt
 yelp
+youtube-dl
