@@ -6,13 +6,14 @@ using ForwardDiff
 using BenchmarkTools
 using Formatting
 using FileIO
-
+using DelimitedFiles
 
 
 
 #readfile
 println("opening file... \n")
 a = open("/home/billykon/programing/2d-elasticity-quadrilateral/plaka5x1.unv","r")
+b = open("/home/billykon/programing/2d-elasticity-quadrilateral/plaka5x1.dat","r")
 include("readfile.jl") #returns array of: nodes, edge, elem, bc
 #include("mesh.jl")
 include("elastic_functions.jl") #defines basic functions
@@ -96,20 +97,11 @@ xs = nodes[:,1]'
 ys = nodes[:,2]'
 
 
-U = zeros(18,1)
+U = zeros(dofs,1)
 
 Ufree = K[freedofs,freedofs]\F[freedofs]
 U[freedofs] .= Ufree
 
-σ = E*LN([.5 .5],xs,ys)*U
+include("stress.jl")
 
-figure(11)
-for j=0:0.1:.5
-    for i=-1:0.01:1
-
-    uv = [i j]
-    (x,y)=quadra(uv,xs,ys)
-    s = E*LN(uv,xs,ys)*U
-    scatter(i,s[1])
-end
-end
+writedlm( "/home/billykon/programing/2d-elasticity-quadrilateral/stress.csv",  stress, ',')

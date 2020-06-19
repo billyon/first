@@ -23,12 +23,14 @@ for i=1:length(elem[:,1])
     stress[i,10:12] = E*LN(uv[4,:],xs,ys)*u
     stress[i,13:15] = E*LN(uv[5,:],xs,ys)*u
     stress[i,16:18] = E*LN(uv[6,:],xs,ys)*u
+    stress[i,19:21] = E*LN(uv[7,:],xs,ys)*u
+    stress[i,22:24] = E*LN(uv[8,:],xs,ys)*u
+    stress[i,25:27] = E*LN(uv[9,:],xs,ys)*u
     for k =1:6
-        B = LN(l[k,:],xs,ys)
+        B = LN(uv[k,:],xs,ys)
 
         sigma = E*B*u
         mean = mean + sigma/6;
      end
-     @show mean
-     #stress[i,:] = mean
+    #stress[i,:] = mean
  end
