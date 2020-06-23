@@ -129,8 +129,8 @@ function BC(f,xedge,yedge,map)
         uv[ind] = g[i]
         (x,y) = quadra(uv,xedge,yedge)
         nuv = Nuv(uv)
-        xdot = nuv[2,:]'*xedge'
-        ydot = nuv[2,:]'*yedge'
+        xdot = nuv[ind,:]'*xedge'
+        ydot = nuv[ind,:]'*yedge'
         road = (xdot[1]^2+ydot[1]^2)^(0.5)
         rhs = rhs + w[i]*N(uv)'*f([x y])*road
     end

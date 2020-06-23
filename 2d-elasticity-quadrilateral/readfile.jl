@@ -13,11 +13,11 @@ function splitToFloat(l)
 end
 (n, e) = splitToInt(lineb[1])
 lineb = lineb[2:end]
-nodes = zeros(n,2)
+nodes = zeros(n,3)
 
 for i=1:n
     l = splitToFloat(lineb[i])
-    nodes[i,:] = [l[2] l[3]]
+    nodes[i,:] = [l[2] l[3] l[4]]
 end
 lineb = lineb[n+1:end]
 
@@ -96,3 +96,4 @@ using Flux:batch
 edge = Transpose(batch(edge))
 elem = Transpose(batch(elem))
 bc = Transpose(batch(bc))
+elem = elem[:,[2 3 4 1 6 7 8 5 9]][:,1,:]
