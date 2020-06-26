@@ -13,11 +13,11 @@ using DelimitedFiles
 #readfile
 println("opening file... \n")
 a = open(
-    "/home/billykon/programing/2d-elasticity-quadrilateral/plaka5x1.unv",
+    "/home/billykon/programing/2d-elasticity-quadrilateral/plaka15x1.unv",
     "r",
 )
 b = open(
-    "/home/billykon/programing/2d-elasticity-quadrilateral/plaka5x1.dat",
+    "/home/billykon/programing/2d-elasticity-quadrilateral/plaka15x1.dat",
     "r",
 )
 include("readfile.jl") #returns array of: nodes, edge, elem, bc
@@ -27,7 +27,9 @@ include("elastic_functions.jl") #defines basic functions
 #start building global array
 n = length(elem[:, 1])
 dofs = 2 * length(nodes[:, 1])
-global E = Ematrix(220e9, 0.5, "stress")
+v = .3
+Y = 200e9
+global E = Ematrix(Y, v, "stress")
 
 global K = sparse([], [], Float64[], dofs, dofs);
 #global M = sparse([],[],Float64[],dofs,dofs);
@@ -53,7 +55,10 @@ uv = [0.5 0.5]
 println("calculating right-hand-side...\n")
 F = zeros(dofs, 1)
 
-global f(x) = [[0 1e6]', [0 0]']
+#---------------------------------------------------
+P=1e6
+global f(x) = [[0 P*(x[2]-x[2]^2)*6]', [0 0]']
+#---------------------------------------------------
 (nbc, ni, ix) = IDs(bc) #nbc has number of conditions
 #ix has edges nodes ids for each condition
 global bc, edge, elem, nodes, i, F
@@ -90,7 +95,7 @@ println("solving for U....\n")
 freedofs = zeros(dofs, 1)
 fixedofs = ix[2][:]'#take first's b.c. nodes
 
-fixedofs = [fixedofs Int.(fixedofs .+0.5*dofs)]
+fixedofs = [fixedofs Int.(5 .+0.5*dofs)]
 freedofs[fixedofs] .= 1
 freedofs = [i for i = 1:dofs if freedofs[i] == 0]
 
@@ -111,37 +116,32 @@ U[freedofs] .= Ufree
 include("stress.jl")
 
 writedlm("/home/billykon/programing/2d-elasticity-quadrilateral/stress.csv",stress,',')
-
-i = collect(1:size(nodes,1))
-flat = collect(edge[:])
-flat = unique(flat) # edge nodes
-freenodes = setdiff(i,flat)
-
-fstress = zeros(3, size(nodes,1), 2)
-fstress[:,:,2] .== 1.
-for i = 1:n
-    #a = setdiff(elem[i, :], flat)' # elem nodes-edge nodes
-    a = elem[i,:]'
-    mapa = [findall(x -> x == a[k], elem[i, :])[1] for k = 1:length(a)] #local element nodes-edge node number
-
-    fstress[:, a, 1] = fstress[:, a, 1][:, 1, :] .+ stress[i, mapa, :]'
-    fstress[:, a, 2] = fstress[:, a, 2][:, 1, :] .+ 1
-end
-#entered = fstress[:,:,2] .!= 0
-temp = zeros(3,size(nodes,1))
-temp = fstress[:,:,1] ./ fstress[:,:,2]
-fstress[:,:,1] = temp
-
-
-#now put edge nodes only once
-#=
-for i = n
-    a = setdiff(elem[i,:],freenodes)'
-    mapa = [findall(x -> x == a[k], elem[i, :])[1] for k = 1:length(a)] #local element nodes-edge node number
-
-    fstress[:,a,1] = stress[i,mapa,:]'
-end
-=#
-writedlm("/home/billykon/programing/2d-elasticity-quadrilateral/stress.csv",fstress[:,:,1]',',')
+writedlm("/home/billykon/programing/2d-elasticity-quadrilateral/stress.csv",fstress',',')
 writedlm("/home/billykon/programing/2d-elasticity-quadrilateral/nodes.csv",nodes,',')
-writedlm("/home/billykon/programing/2d-elasticity-quadrilateral/data.csv",["x" "y" "z" "sx" "sy" "txy" ; nodes fstress[:,:,1]' ./ 1e6],',')
+writedlm("/home/billykon/programing/2d-elasticity-quadrilateral/data.csv",["x" "y" "z" "sx" "sy" "txy" ; nodes fstress' ./ 1e6],',')
+writedlm("/home/billykon/programing/2d-elasticity-quadrilateral/U.csv",U,',')
+
+print(maximum(U))
+
+
+#post processing of bending
+#below analytical solution is compared to the found one
+amplify = 50.
+u = amplify .*U
+nodex = nodes[:,1]
+nodey = nodes[:,2]
+nodedx = u[1:Int(0.5*dofs)].+nodex
+nodedy = u[Int(0.5*dofs)+1:Int(dofs)].+nodey
+
+figure(1)
+scatter(nodedx,nodedy,marker="x")
+axis("equal")
+
+#analytical bending, I = 1/12, D=1, L=15
+uexact = -(2*P/Y).*(nodey.-0.5).*(3. .*nodex.*(30. .-nodex).+2*v.*nodey.*(nodey.-1.))
+vexact = (2*P/Y).*(nodex.^2 .*(45. .-nodex)+3*v*(15. .-nodex).*(nodey.-0.5).^2 +(4+5*v).*nodex./4.)
+nodedxact = nodex .+ uexact.*amplify
+nodedyact = nodey .+ vexact.*amplify
+
+scatter(nodedxact,nodedyact,marker="o")
+axis("equal")

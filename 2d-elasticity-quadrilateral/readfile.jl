@@ -1,4 +1,4 @@
-f(x) = [[0 0]', [0 1e6]']
+
 linea = readlines(a)
 lineb = readlines(b)
 function splitToInt(l)
@@ -45,7 +45,7 @@ while true
     global i
     l = linea[i]
     l = splitToFloat(l)
-    if l[1] == 2467
+    if l[1] == 2467 && length(l)==1
         break
     end
     i = i+1
